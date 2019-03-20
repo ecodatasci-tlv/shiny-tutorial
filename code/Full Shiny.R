@@ -8,12 +8,14 @@ library(tidyr)
 library(leaflet)
 library(lubridate)
 library(ggplot2)
+library(here)
+
 ##Import data
-trawl_data_clean  <- read_csv("~/Shiny tutorial/shiny-tutorial/data/trawl_data_clean2.csv", 
-                                                  col_types = cols(CruiseDate = col_date(format = "%m/%d/%Y")))
+trawl_data_clean  <- read_csv(here::here("data/trawl_data_clean2.csv"), 
+                              col_types = cols(CruiseDate = col_date(format = "%m/%d/%Y")))
 
 ##Load user functions (use function 'source' and the path to the .R file)
-source("~/Shiny tutorial/shiny-tutorial/code/shiny_functions_clean.R")
+source(here::here("code/shiny_functions_clean.R"))
 
 ####Shiny UI
 ui <- dashboardPage(
@@ -44,9 +46,9 @@ ui <- dashboardPage(
     ###The third widget which will allow the user to select the column used for the coloring and ggplot's x-axis
     selectInput(#'selectInput' is a simple widget which allows single value selection
       inputId = "plot_by",#The 'inputId' is used to refer shiny to the values selected by the user
-                label = "Plot by:",#The 'label' is the text which the user will see above the widget
-                choices = c("Depth","Year","Season"),#Which choices can the user pick
-                selected = "Depth")#What is selected as default  when the app opens
+      label = "Plot by:",#The 'label' is the text which the user will see above the widget
+      choices = c("Depth","Year","Season"),#Which choices can the user pick
+      selected = "Depth")#What is selected as default  when the app opens
     
   ),
   ##Here we move to the body of the shiny app where we want to place the leaflet map and the ggplot
@@ -55,8 +57,8 @@ ui <- dashboardPage(
       
       ##First we place the map on the top of the panel
       box(width=20,#Box is used to define the size of the map
-        leafletOutput("mymap",height = 350)#'leafletOutput' is called to plot the leaflet map. NOTICE: "mymap" is an element defined in the server side
-        ),
+          leafletOutput("mymap",height = 350)#'leafletOutput' is called to plot the leaflet map. NOTICE: "mymap" is an element defined in the server side
+      ),
       
       ##Second box for the ggplot
       box(width=20,#Box is used to define the size of the map
@@ -68,7 +70,7 @@ ui <- dashboardPage(
 server <- function(input, output,session) {
   ##In the server side we will do all the data manipulations based user's selection from the input widgets 
   
-
+  
   output$mymap <- renderLeaflet({#Here we create the leaflet map. NOTICE: 1. The map output name will be 'mymap' as defined by "output$mymap" 2. renderLeaflet - is a shiny 'function' which output is a leaflet map
     
     ##Here we will observe the user inputs from the UI side
