@@ -28,8 +28,8 @@ leaflet_plot <- function(data_in, color_by) {
   # Create labels for leaflet
   input_data_wide$label <- paste(paste("Depth:", input_data_wide$Depth),
     paste("Date:", input_data_wide$CruiseDate),
-    paste("Commercial:", round(input_data_wide$com / 1000, digits = 0), "Kg"),
-    paste("Non-Commercial:", round(input_data_wide$noncom / 1000, digits = 0), "Kg"),
+    paste("Commercial:", round(input_data_wide$Commercial / 1000, digits = 0), "Kg"),
+    paste("Non-Commercial:", round(input_data_wide$NonCommercial / 1000, digits = 0), "Kg"),
     sep = "  "
   )
   input_data_wide <- data.frame(input_data_wide)
