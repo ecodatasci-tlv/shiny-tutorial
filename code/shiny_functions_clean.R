@@ -11,16 +11,20 @@
 leaflet_plot <- function(data_in, color_by) {
   # This is the data after the subseting
   input_data_raw <- data_in
+  
   # These are unique locations
   location_unique <- input_data_raw[!duplicated(input_data_raw[, c("Lat", "Lon")]), c("CruiseDate", "Season", "Depth", "Lat", "Lon")]
+  
   # Sum weight for all combinations of locations ("Lat","Lon") and Commercial and non-Commercial species ("Commercial")
   input_data <- input_data_raw %>%
     group_by(Lat, Lon, Commercial) %>%
     summarise(Sumweight = sum(TotalWeight)) %>%
     left_join(location_unique, by = c("Lat", "Lon"))
+  
   # Transform to wide format
   input_data_wide <- spread(input_data, Commercial, Sumweight)
   colnames(input_data_wide) <- c("Lat", "Lon", "CruiseDate", "Season", "Depth", "NonCommercial", "Commercial")
+  
   # Create labels for leaflet
   input_data_wide$label <- paste(paste("Depth:", input_data_wide$Depth),
     paste("Date:", input_data_wide$CruiseDate),
@@ -30,16 +34,28 @@ leaflet_plot <- function(data_in, color_by) {
   )
   input_data_wide <- data.frame(input_data_wide)
   input_data_wide$Year <- year(input_data_wide$CruiseDate)
+  
   # Plot using leaflet
   # set colors
-  factpal <- colorFactor(topo.colors(4), as.factor(input_data_wide[, color_by]))
+  factpal <- colorFactor(topo.colors(4), 
+                         as.factor(input_data_wide[, color_by]))
+  
   # plot
   leaflet() %>%
     addTiles() %>%
     addProviderTiles("CartoDB.DarkMatter", group = "Dark map") %>%
-    fitBounds(min(input_data_wide$Lon) - 0.01, min(input_data_wide$Lat) - 0.01, max(input_data_wide$Lon) + 0.01, max(input_data_wide$Lat) + 0.01) %>%
-    addCircles(lng = input_data_wide$Lon, lat = input_data_wide$Lat, label = input_data_wide$label, color = factpal(as.factor(input_data_wide[, color_by])), radius = 100) %>%
-    addLegend(pal = factpal, values = as.factor(input_data_wide[, color_by]), opacity = 1)
+    fitBounds(min(input_data_wide$Lon) - 0.01, 
+              min(input_data_wide$Lat) - 0.01, 
+              max(input_data_wide$Lon) + 0.01, 
+              max(input_data_wide$Lat) + 0.01) %>%
+    addCircles(lng = input_data_wide$Lon, 
+               lat = input_data_wide$Lat, 
+               label = input_data_wide$label, 
+               color = factpal(as.factor(input_data_wide[, color_by])), 
+               radius = 100) %>%
+    addLegend(pal = factpal, 
+              values = as.factor(input_data_wide[, color_by]), 
+              opacity = 1)
 }
 
 
