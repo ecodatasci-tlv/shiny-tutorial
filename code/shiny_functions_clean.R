@@ -68,40 +68,31 @@ leaflet_plot <- function(data_in, color_by) {
 # group_by - categories on the x-axis
 
 
-ggplot_plot <- function(data_in, group_by) {
-  # This is the data after the subseting
+ggplot_plot <- function(data_in, group_by){
+  #This is the data after the subseting 
   input_data_raw <- data_in
+  
   input_data_raw$Year <- year(data_in$CruiseDate)
-  if (group_by == "Depth") {
-    input_data_ggplot <- input_data_raw %>%
-      group_by(Depth, Commercial) %>%
-      summarise(Sumweight = sum(TotalWeight) / 1000)
-    # turn depth to factor
-    input_data_ggplot$Depth <- as.factor(input_data_ggplot$Depth)
-  } else if (group_by == "Year") {
-    input_data_ggplot <- input_data_raw %>%
-      group_by(Year, Commercial) %>%
-      summarise(Sumweight = sum(TotalWeight) / 1000)
-    # turn depth to factor
-    input_data_ggplot$Year <- as.factor(input_data_ggplot$Year)
-  } else if (group_by == "Season") {
-    input_data_ggplot <- input_data_raw %>%
-      group_by(Season, Commercial) %>%
-      summarise(Sumweight = sum(TotalWeight) / 1000)
-    # turn depth to factor
-    input_data_ggplot$Year <- as.factor(input_data_ggplot$Season)
-  }
-
-
-  ## Plot using ggplot
-  cbbPalette <- c("green", "red")
-  input_data_ggplot <- data.frame(input_data_ggplot)
-  ggplot_catch <- ggplot(data = input_data_ggplot, aes(x = input_data_ggplot[, group_by], y = Sumweight, fill = Commercial)) +
-    geom_bar(stat = "identity", position = position_dodge()) +
-    xlab(group_by) + ylab("Total catch (Kg)") + theme_grey(base_size = 22) +
-    theme(legend.title = element_blank()) +
-    scale_fill_manual(values = cbbPalette)
-
-
+  group_var <- sym(group_by)
+  
+  input_data_ggplot <- input_data_raw %>%
+    mutate_at(vars(Depth, Year, Season), factor) %>% #convert to factor for plotting
+    group_by(!!group_var, Commercial) %>%
+    summarise(Sumweight = sum(TotalWeight)/1000) %>% 
+    ungroup() 
+  
+  ##Plot using ggplot
+  cbbPalette <- c("green","red")
+  
+  ggplot_catch <- ggplot(data = input_data_ggplot, 
+                         aes(!!group_var, 
+                             Sumweight, 
+                             fill = Commercial)) +
+    geom_bar(stat="identity", position = position_dodge())+
+    xlab(group_by) + ylab("Total catch (Kg)") + 
+    theme_grey(base_size = 22) +
+    theme(legend.title=element_blank()) +
+    scale_fill_manual(values=cbbPalette)
+  
   return(ggplot_catch)
 }
