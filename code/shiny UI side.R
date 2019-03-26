@@ -8,12 +8,14 @@ library(tidyr)
 library(leaflet)
 library(lubridate)
 library(ggplot2)
+library(here)
+
 ##Import data
-trawl_data_clean  <- read_csv("~/Shiny tutorial/shiny-tutorial/data/trawl_data_clean2.csv", 
+trawl_data_clean  <- read_csv(here::here("data/trawl_data_clean2.csv"), 
                               col_types = cols(CruiseDate = col_date(format = "%m/%d/%Y")))
 
 ##Load user functions (use function 'source' and the path to the .R file)
-source("~/Shiny tutorial/shiny-tutorial/code/shiny_functions_clean.R")
+source("code/shiny_functions_clean.R")
 
 ####Shiny UI
 ui <- dashboardPage(
