@@ -22,3 +22,4 @@ Useful resources:
 
 - [another Shiny intro](http://benbestphd.com/shiny-intro/) by Ben Best
 - [example with code highlighting](https://shiny.rstudio.com/gallery/telephones-by-region.html) - see what part of the code is affected when you interact with the Shiny app!
+- [Apps and dashboards with Shiny](https://rstudio-education.github.io/shiny-wsds18/) course materials
