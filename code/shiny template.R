@@ -60,12 +60,12 @@ server <- function(input, output,session) {
   output$mymap <- renderLeaflet({#Here we create the leaflet map. NOTICE: 1. The map output name will be 'mymap' as defined by "output$mymap" 2. renderLeaflet - is a shiny 'function' which output is a leaflet map
     
     ##Here we will observe the user inputs from the UI side
-    depth= #### REFER TO THE USER SELCTION ### #Here we observe the value selected by the user in the 'Depth' widget 
-    dateRange=input$dateRange#### REFER TO THE USER SELCTION ### #We observe the value selected by the user in the 'dateRange' widget
-    color_by= #### REFER TO THE USER SELCTION #### #Here we observe the value selected by the user in the 'plot_by' widget
+    depth <- #### REFER TO THE USER SELCTION ### #Here we observe the value selected by the user in the 'Depth' widget 
+    dateRange <- input$dateRange#### REFER TO THE USER SELCTION ### #We observe the value selected by the user in the 'dateRange' widget
+    color_by <- #### REFER TO THE USER SELCTION #### #Here we observe the value selected by the user in the 'plot_by' widget
     
     ##Next we use the selected values to subset the complete data frame 
-    subseted_data=trawl_data_clean%>%
+    subseted_data <- trawl_data_clean%>%
       filter(Depth %in% depth)%>%
       filter(CruiseDate>dateRange[1] & CruiseDate<dateRange[2])
     
@@ -78,11 +78,11 @@ server <- function(input, output,session) {
     
     ##Here we will observe the user inputs from the UI side
     depth= #### REFER TO THE USER SELCTION ### #Here we observe the value selected by the user in the 'Depth' widget
-    dateRange=input$dateRange#### REFER TO THE USER SELCTION ### #We observe the value selected by the user in the 'dateRange' widget
-    plot_by= #### REFER TO THE USER SELCTION #### #Here we observe the value selected by the user in the 'plot_by' widget
+    dateRange <- input$dateRange#### REFER TO THE USER SELCTION ### #We observe the value selected by the user in the 'dateRange' widget
+    plot_by <- #### REFER TO THE USER SELCTION #### #Here we observe the value selected by the user in the 'plot_by' widget
       
     ##Next we use the selected values to subset the complete data frame 
-    subseted_data=trawl_data_clean%>%
+    subseted_data <- trawl_data_clean%>%
       filter(Depth %in% depth)%>%
       filter(CruiseDate>dateRange[1] & CruiseDate<dateRange[2])
     
